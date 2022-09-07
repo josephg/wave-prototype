@@ -222,7 +222,7 @@ function Edit(props: {id: string}) {
 
     createEffect(() => {
       const val = msg()[field]
-      if (val != elem.value) {
+      if (val != null && val !== elem.value) {
         elem.value = val
       }
     })
