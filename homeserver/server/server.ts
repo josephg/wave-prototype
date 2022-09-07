@@ -6,10 +6,11 @@ import * as http from 'http'
 import {createServer as createViteServer} from 'vite'
 import fs from 'fs'
 // import {stream as braidStream} from '@braid-protocol/server'
-import * as dt from './db/index.js'
-import { createAgent, rateLimit } from './db/utils.js'
-import { Operation, ROOT_LV, WSServerClientMsg } from './db/types.js'
-import { hasVersion, summarizeVersion } from './db/causal-graph.js'
+import * as dt from '../db/index.js'
+import { createAgent, rateLimit } from '../db/utils.js'
+import { Operation, ROOT_LV, WSServerClientMsg } from '../db/types.js'
+import { hasVersion, summarizeVersion } from '../db/causal-graph.js'
+import {makeRouter as makeBlogRouter} from './blog.js'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -82,6 +83,8 @@ const broadcastOp = (ops: Operation[], exclude?: any) => {
 ;(async () => {
   const app = polka()
 
+  app.use('/blog', makeBlogRouter(db))
+
   if (isProd) {
     app.use(sirv('dist', { dev: false }))
   } else {
@@ -94,7 +97,7 @@ const broadcastOp = (ops: Operation[], exclude?: any) => {
 
     app.use(vite.middlewares)
 
-    app.get('*', async (req, res, next) => {
+    app.get('/:user', async (req, res, next) => {
       const url = req.originalUrl
 
       const indexHtml = fs.readFileSync('index.html', 'utf-8')

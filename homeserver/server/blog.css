@@ -1,0 +1,143 @@
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #eee;
+  color: #141414;
+  line-height: 1.4;
+  font-size: 18px;
+}
+
+@media (max-width: 799px) {
+  body {
+    font-size: 16px;
+  }
+  pre {
+    font-size: 12px !important;
+  }
+}
+
+@media (min-width: 800px) {
+  body {
+    font-size: 18px;
+  }
+}
+
+h1, h2, h3, h4 {
+  color: #222222;
+  margin: 40px 0 0 -20px;
+}
+
+h1 { font-size: 200%; }
+h2 { font-size: 130%; }
+h3 { font-size: 110%; }
+h4 { font-size: 100%; }
+
+main {
+  margin-left: 10vw;
+  margin-right: 10vw;
+  max-width: 800px;
+}
+
+blockquote {
+  /* margin: 0 0 0 -44px; */
+  /* margin: 0 0 0 -44px; */
+  margin: 0;
+  /* padding: 2px 0 2px 32px; */
+  padding: 0 0 0 32px;
+  border-left: #868686 8px solid;
+  color: #2a2a2a;
+}
+
+blockquote p {
+  margin: 20px 0;
+  padding: 3px;
+  font-style: italic;
+}
+
+hr {
+  border: 3px dashed #868686;
+  height: 0;
+  margin: 40px 30px;
+}
+
+img {
+  max-width: 80vw;
+}
+
+.youtube {
+  width: 560px;
+  max-width: 80vw;
+  height: 315px;
+  max-height: 45vw;
+}
+
+div.remark-highlight > pre {
+  /* width: 500px;
+  overflow-x: scroll; */
+  border-radius: 4px;
+}
+
+.post-meta {
+  color: #868686;
+  font-size: 80%;
+  font-weight: 600;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table th {
+  color: black;
+}
+
+table th, table td {
+  padding: 8px 8px;
+  line-height: 20px;
+  /* border-bottom: 1px solid #868686; */
+  /* border-right: 2px solid #9b9b9b; */
+  /* border: 1px solid black; */
+}
+
+table tr:nth-child(odd) > td {
+  background-color: rgb(221, 221, 221);
+}
+
+table th:not(:last-child), table td:not(:last-child) {
+  border-right: 2px solid #9b9b9b;
+}
+
+
+/* footer::before {
+  content: '';
+  width: 100%;
+  display: block;
+  border: 1px solid #868686;
+} */
+
+footer {
+  margin-top: 4em;
+  border-top: 5px solid #868686;
+  /* font-size: 70%; */
+  padding: 3em 2em;
+  font-weight: 700;
+  color: #474747;
+}
+
+footer a {
+  font-size: 75%;
+}
+footer a:visited {
+  text-decoration: none;
+  color: #474747;
+}
+
+footer a:link {
+  text-decoration: none;
+  color: #474747;
+}

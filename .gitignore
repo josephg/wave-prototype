@@ -1,4 +1,5 @@
 dist
+dist_ts
 bundle
 node_modules
 id.json

@@ -20,13 +20,14 @@ const setS = (newState: State, e: Event) => {
   setState(newState)
 }
 
-type WaveSchema = 'post' | 'note' | 'unknown'
+type WaveSchema = 'post' | 'note' | 'unknown' | 'chatroom'
 interface Wave {
   id?: string
 
   participants: string[]
   type: WaveSchema
   content: any
+  [k: string]: any // Ideally this should be tucked inside content.
 }
 
 const inspectMessage = (id: string) => {
@@ -184,6 +185,8 @@ function Participants(props: {id: string}) {
   )
 }
 
+const errExpr = (str: string): never => { throw Error(str) }
+
 function Edit(props: {id: string}) {
   const id = props.id
   console.log('id', id)
@@ -191,17 +194,39 @@ function Edit(props: {id: string}) {
 
   const msg = createMemo(() => waveWithId(id))
 
-  const bind = (elem: HTMLTextAreaElement) => {
-    console.log('bind')
+  const bindTextArea = (field: string) => (elem: HTMLTextAreaElement) => {
     ;['textInput', 'keydown', 'keyup', 'select', 'cut', 'paste', 'input'].forEach(eventName => {
       elem.addEventListener(eventName, e => {
         const newVal = elem.value
-        const oldVal = msg().content ?? ''
+        const oldVal = msg()[field] ?? ''
 
         if (newVal !== oldVal) {
-          net.set('waves', id, 'content', newVal)
+          net.set('waves', id, field, newVal)
+        }
+      })
+    })
+  }
+
+  const bindInput = (field: string) => (elem: HTMLInputElement) => {
+    ;['textInput', 'keydown', 'keyup', 'select', 'cut', 'paste', 'input'].forEach(eventName => {
+      elem.addEventListener(eventName, e => {
+        let oldVal: any, newVal: any
+        if (elem.type === 'text') {
+          newVal = elem.value
+          oldVal = msg()[field] ?? ''
+        } else if (elem.type === 'checkbox') {
+          newVal = elem.checked
+          oldVal = msg()[field] ?? false
+        } else {
+          console.log(elem.type)
+          throw Error('Huh?? Unknown input type')
         }
 
+        // console.log(oldVal, newVal)
+
+        if (newVal !== oldVal) {
+          net.set('waves', id, field, newVal)
+        }
       })
     })
   }
@@ -226,9 +251,28 @@ function Edit(props: {id: string}) {
       <div class='msgcontent'>
         <Switch fallback={<div>Unknown schema {state()} cannot be rendered!</div>}>
           <Match when={msg().type === 'post'}>
-            <textarea ref={bind} placeholder='Type here yo'>{msg().content ?? ''}</textarea>
+            <div class='post'>
+              {/* hi {JSON.stringify(msg())} */}
+              <label><span class='msgfieldlabel'>Title: </span>
+                <input type='text' ref={bindInput('title')} placeholder='Title' value={msg().title ?? ''} />
+              </label>
 
-            {/* Content: {msg().content ?? ''} */}
+              <label><span class='msgfieldlabel'>Slug: </span>
+                <input type='text' ref={bindInput('slug')} placeholder='cool_post' value={msg().slug ?? ''} />
+              </label>
+
+              <label><span class='msgfieldlabel'>Published: </span>
+                <input type='checkbox' ref={bindInput('published')} placeholder='cool_post' checked={msg().published ?? false} />
+                <Show when={msg().slug != '' && msg().published}>
+                  <a href={`/blog/${msg().slug}`} target='_blank'>Visit live</a>
+                </Show>
+              </label>
+
+              <textarea ref={bindTextArea('content')} placeholder='Type here yo'>{msg().content ?? ''}</textarea>
+            </div>
+          </Match>
+          <Match when={msg().type === 'chatroom'}>
+            <h1>Cool chat room! (TODO!)</h1>
           </Match>
         </Switch>
       </div>

@@ -110,10 +110,24 @@ a,a:visited {
   min-height: 300px;
 }
 
+.post {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
+.post > * {
+  flex-grow: 0;
+  padding: 0.2em;
+}
+.post input[type=text] {
+  display: inline-block;
+  width: 20em;
+}
 
 
 textarea {
+  flex-grow: 1;
   width: 100%;
   height: 100%;
   /* height: calc(100vh - 9em);
