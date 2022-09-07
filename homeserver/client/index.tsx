@@ -217,6 +217,15 @@ function Edit(props: {id: string}) {
         }
       })
     })
+
+    elem.value = msg()[field] ?? ''
+
+    createEffect(() => {
+      const val = msg()[field]
+      if (val != elem.value) {
+        elem.value = val
+      }
+    })
   }
 
   const bindInput = (field: string) => (elem: HTMLInputElement) => {
@@ -293,11 +302,11 @@ function Edit(props: {id: string}) {
               <label><span class='msgfieldlabel'>Published: </span>
                 <input type='checkbox' ref={bindInput('published')} placeholder='cool_post' checked={msg().published ?? false} />
                 <Show when={msg().slug != '' && msg().published}>
-                  <a href={`/blog/${msg().slug}`} target='_blank'>Visit live</a>
+                  <a href={`/blog/${msg().slug}`} target='_blank'>View on web</a>
                 </Show>
               </label>
 
-              <textarea ref={bindTextArea('content')} placeholder='Type here yo'>{msg().content ?? ''}</textarea>
+              <textarea ref={bindTextArea('content')} placeholder='Type here yo'></textarea>
             </div>
           </Match>
           <Match when={msg().type === 'chatroom'}>

@@ -86,7 +86,14 @@ const broadcastOp = (ops: Operation[], exclude?: any) => {
   app.use('/blog', makeBlogRouter(db))
 
   if (isProd) {
-    app.use(sirv('dist', { dev: false }))
+    app.use(sirv('dist', {
+      dev: false,
+    }))
+    const index = fs.readFileSync('dist/index.html')
+    app.get('/:user', async (req, res, next) => {
+      res.setHeader('content-type', 'text/html')
+      res.end(index)
+    })
   } else {
     const vite = await createViteServer({
       server: {
