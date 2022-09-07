@@ -52,7 +52,7 @@ const connect = () => {
   const loc = window.location
   const url = (loc.protocol === 'https:' ? 'wss://' : 'ws://')
     + loc.host
-    + loc.pathname
+    + '/'
     + 'ws'
   console.log('url', url)
   ws = new WebSocket(url)

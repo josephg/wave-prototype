@@ -92,7 +92,7 @@ const localWaves = (): Wave[] => (
 
 function MessageListItem(wave: Wave) {
   console.log('type', wave.type)
-  return <div class='message' onClick={[inspectMessage, wave.id!]}>
+  return <div class='messagelistitem' onClick={[inspectMessage, wave.id!]}>
     <Switch fallback={<>
       <span>Unknown data</span> - <span>ID: {wave.id}</span>
     </>}>
@@ -223,7 +223,7 @@ function Edit(props: {id: string}) {
         </label>
       </div>
 
-      <div id='content'>
+      <div class='msgcontent'>
         <Switch fallback={<div>Unknown schema {state()} cannot be rendered!</div>}>
           <Match when={msg().type === 'post'}>
             <textarea ref={bind} placeholder='Type here yo'>{msg().content ?? ''}</textarea>

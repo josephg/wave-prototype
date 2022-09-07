@@ -69,25 +69,8 @@ a,a:visited {
   font-weight: bolder;
 }
 
-#content {
-  position: relative;
-}
 
-.msgheader {
-  background-color: rgb(20, 30, 41);
-  border-bottom: 2px solid rgb(32, 60, 90);
-  padding-bottom: 0.5em;
-}
-.msgheader > * {
-  padding: 0.5em;
-}
-.msgfieldlabel {
-  display: inline-block;
-  min-width: 8em;
-  font-weight: bold;
-}
-.message {
-  /* background-color: rgb(15, 23, 31); */
+.messagelistitem {
   background-color: rgb(20, 30, 41);
   border-bottom: 1px solid #aaa;
   cursor: pointer;
@@ -97,11 +80,44 @@ a,a:visited {
 }
 
 
+
+#content {
+  grid-area: content;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.msgheader {
+  background-color: rgb(20, 30, 41);
+  border-bottom: 2px solid rgb(32, 60, 90);
+  padding-bottom: 0.5em;
+  flex-grow: 0;
+}
+.msgheader > * {
+  padding: 0.5em;
+}
+.msgfieldlabel {
+  display: inline-block;
+  min-width: 8em;
+  font-weight: bold;
+}
+
+.msgcontent {
+  flex-grow: 1;
+  width: 100%;
+  padding: 1em;
+  min-height: 300px;
+}
+
+
+
+
 textarea {
-  /* position: fixed; */
-  height: calc(100vh - 9em);
-  width: calc(100% - 2em);
-  margin: 1em;
+  width: 100%;
+  height: 100%;
+  /* height: calc(100vh - 9em);
+  width: calc(100% - 2em); */
   resize: none;
   padding: 1.2em;
   /* border: 5px solid #0f0d6b; */
