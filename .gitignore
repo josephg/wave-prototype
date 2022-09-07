@@ -1,0 +1,6 @@
+dist
+bundle
+node_modules
+id.json
+db.json
+.*.swp
