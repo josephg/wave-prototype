@@ -1,5 +1,5 @@
 /* @refresh reload */
-import { render } from 'solid-js/web'
+import { render, Portal } from 'solid-js/web'
 import {createSignal, For, Show, Switch, Match, createEffect, createMemo} from 'solid-js'
 
 import './index.css'
@@ -202,6 +202,8 @@ function Edit(props: {id: string}) {
   console.log('id', id)
   // let textarea: HTMLTextAreaElement
 
+  const [fullscreen, setFullscreen] = createSignal(false)
+  const toggleFullscreen = () => setFullscreen(f => !f)
   const msg = createMemo(() => waveWithId(id))
 
   const bindTextArea = (field: string) => (elem: HTMLTextAreaElement) => {
@@ -266,7 +268,16 @@ function Edit(props: {id: string}) {
         </label>
       </div>
 
-      <div class='msgcontent'>
+      <div class='msgcontent' classList={{fullscreen: fullscreen()}}>
+        <button style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          'min-width': '1.5em',
+          'min-height': '1.5em',
+          'font-size': '20px',
+          'font-weight': 'bolder'
+        }} onClick={toggleFullscreen}>⛶</button>
         <Switch fallback={<div>Unknown schema {state()} cannot be rendered!</div>}>
           <Match when={msg().type === 'post'}>
             <div class='post'>
@@ -294,7 +305,6 @@ function Edit(props: {id: string}) {
           </Match>
         </Switch>
       </div>
-
     </>
   )
 }

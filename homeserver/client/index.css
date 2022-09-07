@@ -108,6 +108,7 @@ a,a:visited {
   width: 100%;
   padding: 1em;
   min-height: 300px;
+  position: relative;
 }
 
 .post {
@@ -123,6 +124,13 @@ a,a:visited {
 .post input[type=text] {
   display: inline-block;
   width: 20em;
+}
+
+.fullscreen {
+  position: fixed;
+  left: 0; right: 0; top: 0; bottom: 0;
+  background-color: black;
+  z-index: 1;
 }
 
 
