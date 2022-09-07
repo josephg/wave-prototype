@@ -42,7 +42,12 @@ function App() {
         the most rad mail client yo ~
         <span style={{
           float: 'right'
-        }}>Logged in as {username}</span>
+        }}>Logged in as <span
+          style={{
+            "margin-right": '4px',
+            "font-weight": 'bold',
+          }}
+        >{username}</span></span>
       </div>
 
       <div id='sidebar'>
@@ -85,6 +90,19 @@ const localWaves = (): Wave[] => (
   )
 )
 
+function MessageListItem(wave: Wave) {
+  console.log('type', wave.type)
+  return <div class='message' onClick={[inspectMessage, wave.id!]}>
+    <Switch fallback={<>
+      <span>Unknown data</span> - <span>ID: {wave.id}</span>
+    </>}>
+      <Match when={wave.type === 'post'}>
+        <b>POST:</b> {wave.content ?? 'empty'}
+      </Match>
+    </Switch>
+  </div>
+}
+
 function Inbox(props: {typeFilter?: string}) {
   const typeFilter = props.typeFilter
 
@@ -110,8 +128,7 @@ function Inbox(props: {typeFilter?: string}) {
         }}
       >{typeFilter == null ? '+ Create' : `+ Create ${typeFilter}`}</button>
       <For each={filtered()}>{(wave, i) =>
-        <div class='message' onClick={[inspectMessage, wave.id!]}>{wave.content ?? wave.id}</div>
-
+        MessageListItem(wave)
       }</For>
     </>
 
