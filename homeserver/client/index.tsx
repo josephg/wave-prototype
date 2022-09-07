@@ -11,14 +11,17 @@ if (username[0] === '/') username = username.slice(1)
 
 // import App from './App';
 
-type State = 'inbox' | 'message' | 'posts'
+type State = 'inbox' | 'posts' | 'chatrooms'
 const [state, setState] = createSignal<State>('inbox')
 const [activeMessage, setActiveMessage] = createSignal<null | string>(null)
 
 const setS = (newState: State, e: Event) => {
   console.log('set state', newState)
   setState(newState)
+  setActiveMessage(null)
 }
+
+const clearMessage = () => setActiveMessage(null)
 
 type WaveSchema = 'post' | 'note' | 'unknown' | 'chatroom'
 interface Wave {
@@ -32,7 +35,7 @@ interface Wave {
 
 const inspectMessage = (id: string) => {
   setActiveMessage(id)
-  setState('message')
+  // setState('message')
   console.log('set active', id)
 }
 
@@ -54,18 +57,22 @@ function App() {
       <div id='sidebar'>
         <a onClick={[setS, 'inbox']} classList={{selected: state() === 'inbox'}}>All</a>
         <a onClick={[setS, 'posts']} classList={{selected: state() === 'posts'}}>Posts</a>
+        <a onClick={[setS, 'chatrooms']} classList={{selected: state() === 'chatrooms'}}>Chat rooms</a>
       </div>
 
       <div id='content'>
         <Switch fallback={<div>Unknown state {state()}</div>}>
+          <Match when={activeMessage() != null}>
+            <Edit id={activeMessage()!} />
+          </Match>
           <Match when={state() === 'inbox'}>
             <Inbox />
           </Match>
-          <Match when={state() === 'message'}>
-            <Edit id={activeMessage()!} />
-          </Match>
           <Match when={state() === 'posts'}>
             <Inbox typeFilter='post'/>
+          </Match>
+          <Match when={state() === 'chatrooms'}>
+            <Inbox typeFilter='chatroom'/>
           </Match>
         </Switch>
       </div>
@@ -99,6 +106,9 @@ function MessageListItem(wave: Wave) {
     </>}>
       <Match when={wave.type === 'post'}>
         <b>POST:</b> {wave.content ?? 'empty'}
+      </Match>
+      <Match when={wave.type === 'chatroom'}>
+        <b>Party room:</b> Party goers: {wave.participants.join(', ')}
       </Match>
     </Switch>
   </div>
@@ -237,6 +247,13 @@ function Edit(props: {id: string}) {
   return (
     <>
       <div class='msgheader'>
+        {/* <button
+          style={{
+            margin: '5px',
+            padding: '2px',
+          }}
+          onClick={clearMessage}
+        >&lt;- Back</button> */}
         <Participants id={id} />
 
         <label><span class='msgfieldlabel'>Schema: </span>
@@ -244,6 +261,7 @@ function Edit(props: {id: string}) {
             <option value='' selected={msg().type === 'unknown'}>(Unknown)</option>
             <option value='post' selected={msg().type === 'post'}>Blog Post</option>
             <option value='note' selected={msg().type === 'note'}>Note</option>
+            <option value='chatroom' selected={msg().type === 'chatroom'}>Chat room</option>
           </select>
         </label>
       </div>
